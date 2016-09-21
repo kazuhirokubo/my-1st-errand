@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -26,14 +27,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String textPasswd = textViewPasswd.getText().toString();
 
         if (view.getId() == R.id.buttonLogin && textPasswd.equals("1234")) {
-//            Toast.makeText(this, "ログインボタンが押されました！", Toast.LENGTH_LONG).show();
             startActivity(new Intent(
                     MainActivity.this,
                     Main2Activity.class)
             );
             textViewPasswd.setText("");
-//        }else if (view.getId() == R.id.buttonAdd){
-//            Toast.makeText(this, "追加ボタンが押されました！", Toast.LENGTH_LONG).show();
+        }else{
+          Toast.makeText(this, "パスワードが正しくありません", Toast.LENGTH_LONG).show();
         }
     }
 }
