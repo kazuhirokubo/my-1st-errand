@@ -23,8 +23,8 @@
 
 10. [x] Issueを使って要件を整理し、スケジュールをたてる
 
-11. [ ] Butterknifeというライブラリを調べて、既存のものと置き換えて下さい
+11. [ ] Butterknifeというライブラリを調べて、既存のものと置き換えて下さい(要git-flow)
 
-12. [ ] SharefPreferenceについて調べて、既存のものと置き換えて下さい
+12. [ ] SharefPreferenceについて調べて、既存のものと置き換えて下さい(要git-flow)
 
-13. RecyclerViewをListViewに置き換えて下さい(要git-flow)
+13. [ ] RecyclerViewをListViewに置き換えて下さい(要git-flow)
