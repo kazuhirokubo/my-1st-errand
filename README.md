@@ -25,6 +25,6 @@
 
 11. [ ] Butterknifeというライブラリを調べて、既存のものと置き換えて下さい(要git-flow)
 
-12. [ ] SharefPreferenceについて調べて、既存のものと置き換えて下さい(要git-flow)
+12. [ ] SharedPreferencesについて調べて、既存のものと置き換えて下さい(要git-flow)
 
 13. [ ] RecyclerViewをListViewに置き換えて下さい(要git-flow)
