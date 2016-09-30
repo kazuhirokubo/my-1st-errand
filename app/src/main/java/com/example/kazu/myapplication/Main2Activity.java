@@ -22,10 +22,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+
 public class Main2Activity extends Activity implements View.OnClickListener {
 
     private RecyclerView.Adapter adapter;
     private ArrayList<String> list;
+
+    @BindView(R.id.buttonAdd) Button buttonAdd;
+    @BindView(R.id.buttonLogout) Button buttonLogout;
+    @BindView(R.id.recyclerview_list) RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +45,8 @@ public class Main2Activity extends Activity implements View.OnClickListener {
 
         getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.activity_main2_title_bar);
 
-        // ボタンの取得
-        Button buttonAdd = (Button)findViewById(R.id.buttonAdd);
-        Button buttonLogout = (Button)findViewById(R.id.buttonLogout);
-        // リスナーの登録
-        buttonAdd.setOnClickListener(this);
-        buttonLogout.setOnClickListener(this);
+        ButterKnife.bind(this);
 
-
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_list);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         list = loadItem();
@@ -55,12 +57,12 @@ public class Main2Activity extends Activity implements View.OnClickListener {
     }
 
 
-
+    @OnClick({ R.id.buttonAdd, R.id.buttonLogout })
     public void onClick(View view) {
-        if (view.getId() == R.id.buttonAdd){
+        if (view.getId() == buttonAdd.getId()){
             Toast.makeText(this, "追加ボタンが押されました", Toast.LENGTH_LONG).show();
             addItem();
-        }else if(view.getId() == R.id.buttonLogout){
+        }else if(view.getId() == buttonLogout.getId()){
             deleteFile("item.txt");
             finish();
         }else{

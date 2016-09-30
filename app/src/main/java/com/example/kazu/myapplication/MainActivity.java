@@ -8,25 +8,28 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class MainActivity extends Activity implements View.OnClickListener {
+
+    @BindView(R.id.buttonLogin) Button buttonLogin;
+    @BindView(R.id.textPasswd) TextView textViewPasswd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // ボタンの取得
-        Button buttonLogin = (Button)findViewById(R.id.buttonLogin);
-        // リスナーの登録
-        buttonLogin.setOnClickListener(this);
+        ButterKnife.bind(this);
     }
 
-    @Override
+    @OnClick(R.id.buttonLogin)
     public void onClick(View view) {
-        TextView textViewPasswd = (TextView) findViewById(R.id.textPasswd);
         String textPasswd = textViewPasswd.getText().toString();
 
-        if (view.getId() == R.id.buttonLogin && textPasswd.equals("1234")) {
+        if (textPasswd.equals("1234")) {
             startActivity(new Intent(
                     MainActivity.this,
                     Main2Activity.class)
