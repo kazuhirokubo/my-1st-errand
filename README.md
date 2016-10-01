@@ -27,6 +27,8 @@
 
 12. [ ] SharedPreferencesについて調べて、既存のものと置き換えて下さい(要git-flow)
 
-13. [ ] RecyclerViewをListViewに置き換えて下さい(要git-flow)
+13. [ ] lombokについて調べて、既存のものと置き換えてください
 
-14. [ ] ActivieAndroidについて調べて、既存のものと置き換えて下さい
+14. [ ] RecyclerViewをListViewに置き換えて下さい(要git-flow)
+
+15. [ ] ActivieAndroidについて調べて、既存のものと置き換えて下さい
