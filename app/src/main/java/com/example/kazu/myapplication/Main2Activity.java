@@ -33,6 +33,7 @@ public class Main2Activity extends Activity implements View.OnClickListener {
 
     private RecyclerView.Adapter mAdapter;
     private List<ModelList> mList;
+    private ModelList mModel;
 
     @BindView(R.id.buttonAdd) Button buttonAdd;
     @BindView(R.id.buttonLogout) Button buttonLogout;
@@ -81,7 +82,10 @@ public class Main2Activity extends Activity implements View.OnClickListener {
         if(mList==null) {
             mList = new ArrayList<ModelList>();
         }
-        mList.add(0, new ModelList(simpleDateFormat.format(date)));
+
+        mModel = new ModelList(simpleDateFormat.format(date));
+        mList.add(0, mModel);
+
 
         mAdapter = new RecyclerAdapter(mList);
         recyclerView.setAdapter(mAdapter);
@@ -138,7 +142,7 @@ public class Main2Activity extends Activity implements View.OnClickListener {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             final TextView textItem = (TextView) holder.itemView.findViewById(R.id.item_name);
-            textItem.setText(mItemList.get(position).datetime);
+            textItem.setText(mItemList.get(position).getDatetime());
         }
 
         @Override
