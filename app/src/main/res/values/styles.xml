@@ -8,11 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <!-- parentを指定しないとRuntimeExceptionになる -->
-    <style name="CustomTheme" parent="android:Theme">
-        　　<!-- タイトルバーの高さを調整 -->
-        <item name="android:windowTitleSize">50dp</item>
-        　　<!-- 既存のタイトルバーのスタイルを無効にする -->
-        <item name="android:windowTitleBackgroundStyle">@null</item>
-    </style>
 </resources>
