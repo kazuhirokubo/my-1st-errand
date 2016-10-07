@@ -2,19 +2,8 @@ package com.example.kazu.myapplication;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -33,10 +21,12 @@ import butterknife.OnClick;
 
 public class Main2Activity extends Activity {
 
+
     @BindView(R.id.listview) ListView mListView;
 
     private BaseAdapter mAdapter;
     private List<ListViewItemModel> mItemList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +38,8 @@ public class Main2Activity extends Activity {
 
         mItemList = loadItem();
 
-//        mItemList = new ArrayList<ListViewItemModel>();
-//        mItemList.add(new ListViewItemModel("2016/10/01 12:00:00"));
-//        mItemList.add(new ListViewItemModel("2016/10/01 11:00:00"));
-//        mItemList.add(new ListViewItemModel("2016/10/01 10:00:00"));
-
         mAdapter = new ListViewAdapter(this.getApplicationContext(), R.layout.listview_row, mItemList);
 
-        // ListViewにadapterをセット
         mListView.setAdapter(mAdapter);
     }
 
@@ -86,7 +70,6 @@ public class Main2Activity extends Activity {
         }catch( IOException e ){
             e.printStackTrace();
         }
-
     }
 
     protected List<ListViewItemModel> loadItem(){

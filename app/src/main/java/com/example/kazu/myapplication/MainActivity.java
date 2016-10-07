@@ -8,11 +8,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+
 public class MainActivity extends Activity implements View.OnClickListener {
+
 
     @BindView(R.id.buttonLogin) Button buttonLogin;
     @BindView(R.id.textPasswd) TextView textViewPasswd;
