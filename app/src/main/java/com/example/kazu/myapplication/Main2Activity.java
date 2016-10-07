@@ -1,22 +1,24 @@
 package com.example.kazu.myapplication;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,12 +31,14 @@ import butterknife.OnClick;
 
 public class Main2Activity extends Activity implements View.OnClickListener {
 
-    private RecyclerView.Adapter adapter;
-    private ArrayList<String> list;
+    private RecyclerView.Adapter mAdapter;
+    private List<ModelList> mList;
+    private ModelList mModel;
 
     @BindView(R.id.buttonAdd) Button buttonAdd;
     @BindView(R.id.buttonLogout) Button buttonLogout;
     @BindView(R.id.recyclerview_list) RecyclerView recyclerView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,70 +53,83 @@ public class Main2Activity extends Activity implements View.OnClickListener {
 
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        list = loadItem();
 
-        adapter = new RecyclerAdapter(list);
+        mList = loadItem();
 
-        recyclerView.setAdapter(adapter);
+        if (mList != null) {
+            mAdapter = new RecyclerAdapter(mList);
+            recyclerView.setAdapter(mAdapter);
+        }
     }
-
 
     @OnClick({ R.id.buttonAdd, R.id.buttonLogout })
     public void onClick(View view) {
         if (view.getId() == buttonAdd.getId()){
-            Toast.makeText(this, "追加ボタンが押されました", Toast.LENGTH_LONG).show();
             addItem();
+            writeItem();
         }else if(view.getId() == buttonLogout.getId()){
-            deleteFile("item.txt");
+            resetItem();
             finish();
         }else{
 
         }
     }
 
-
     protected void addItem(){
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        list.add(0, simpleDateFormat.format(date));
-        writeItem(simpleDateFormat.format(date));
-        adapter.notifyItemInserted(0);
-    }
 
-    protected void writeItem(String text){
-        try{
-            FileOutputStream out = openFileOutput("item.txt", MODE_PRIVATE|MODE_APPEND);
-            out.write(text.getBytes());
-            out.write(10);
-
-        }catch( IOException e ){
-            e.printStackTrace();
+        if(mList==null) {
+            mList = new ArrayList<ModelList>();
         }
 
+        mModel = new ModelList(simpleDateFormat.format(date));
+        mList.add(0, mModel);
+
+
+        mAdapter = new RecyclerAdapter(mList);
+        recyclerView.setAdapter(mAdapter);
+        mAdapter.notifyItemInserted(0);
+
+
+
     }
 
-    protected ArrayList<String> loadItem(){
-        ArrayList<String> list = new ArrayList();
-        try{
-            FileInputStream in = openFileInput("item.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader( in , "UTF-8"));
-            String tmp;
-            while((tmp = reader.readLine()) != null){
-                list.add(tmp);
+    protected void resetItem(){
+        getSharedPreferences("Array", Context.MODE_PRIVATE).edit().clear().commit();
+    }
 
-            }
-            reader.close();
-        }catch( IOException e ){
-            e.printStackTrace();
+    protected void writeItem(){
+        Gson gson = new Gson();
+        String textList = gson.toJson(mList);
+
+        SharedPreferences sharedPref = getSharedPreferences("Array", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("list", textList).commit();
+    }
+
+
+    protected ArrayList<ModelList> loadItem(){
+        ArrayList<ModelList> list = new ArrayList<ModelList>();
+        try {
+            String textList = getSharedPreferences("Array", Context.MODE_PRIVATE)
+                    .getString("list", "");
+
+            Gson gson = new Gson();
+            Type listType = new TypeToken<ArrayList<ModelList>>(){}.getType();
+            list = gson.fromJson(textList, listType);
+
+        }catch(Exception ex){
+
         }
+
         return list;
     }
 
-    private static final class RecyclerAdapter
-            extends RecyclerView.Adapter {
-        private List mItemList = new ArrayList();
+    private static final class RecyclerAdapter extends RecyclerView.Adapter {
+        private List<ModelList> mItemList;
 
-        private RecyclerAdapter(final List itemList) {
+        private RecyclerAdapter(final List<ModelList> itemList) {
             mItemList = itemList;
         }
 
@@ -125,7 +142,7 @@ public class Main2Activity extends Activity implements View.OnClickListener {
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             final TextView textItem = (TextView) holder.itemView.findViewById(R.id.item_name);
-            textItem.setText(mItemList.get(position).toString());
+            textItem.setText(mItemList.get(position).getDatetime());
         }
 
         @Override
