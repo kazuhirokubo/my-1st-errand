@@ -32,3 +32,6 @@
 14. [ ] RecyclerViewをListViewに置き換えて下さい(要git-flow)
 
 15. [ ] ActivieAndroidについて調べて、既存のものと置き換えて下さい
+
+https://github.com/opdsk/my-1st-errand/wiki/APIリファレンス
+上記APIリファレンスを見ながらAPIｓ化する
