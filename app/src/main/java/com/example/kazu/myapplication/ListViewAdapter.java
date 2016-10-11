@@ -18,14 +18,14 @@ import java.util.List;
 public class ListViewAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<ListViewItemModel> mItemList;
+    private List<Item> mItemList;
     private int mLayoutId;
 
     static class ViewHolder {
         TextView date;
     }
 
-    public ListViewAdapter(Context context, int itemLayoutId, List<ListViewItemModel> itemList ){
+    public ListViewAdapter(Context context, int itemLayoutId, List<Item> itemList ){
 
         mInflater = LayoutInflater.from(context);
         mLayoutId = itemLayoutId;
@@ -48,9 +48,9 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Log.d("testUserName", mItemList.get(position).getDate());
+        Log.d("testUserName", mItemList.get(position).getDateAt());
 
-        holder.date.setText(mItemList.get(position).getDate());
+        holder.date.setText(mItemList.get(position).getDateAt());
         return convertView;
     }
 

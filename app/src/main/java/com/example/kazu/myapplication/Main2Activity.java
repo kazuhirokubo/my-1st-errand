@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+
+import com.activeandroid.ActiveAndroid;
+import com.activeandroid.Configuration;
+import com.activeandroid.query.Delete;
+import com.activeandroid.query.Select;
+
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -25,12 +31,16 @@ public class Main2Activity extends Activity {
     @BindView(R.id.listview) ListView mListView;
 
     private BaseAdapter mAdapter;
-    private List<ListViewItemModel> mItemList;
+    private List<Item> mItemList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Configuration.Builder builder = new Configuration.Builder(getBaseContext());
+        builder.addModelClass(Item.class);
+        ActiveAndroid.initialize(builder.create(), true);
 
         setContentView(R.layout.activity_main2);
 
@@ -47,7 +57,9 @@ public class Main2Activity extends Activity {
     protected void finishActivity(){
         mItemList.clear();
         mAdapter.notifyDataSetChanged();
-        deleteFile("item.txt");
+
+        deleteItem();
+
         finish();
     }
 
@@ -56,36 +68,35 @@ public class Main2Activity extends Activity {
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String nowDateTime = simpleDateFormat.format(date);
-        mItemList.add(0, new ListViewItemModel(nowDateTime));
+        Item item = new Item();
+        item.setDateAt(nowDateTime);
+        mItemList.add(0, item);
         mAdapter.notifyDataSetChanged();
         writeItem(nowDateTime);
     }
 
-    protected void writeItem(String text){
-        try{
-            FileOutputStream out = openFileOutput("item.txt", MODE_PRIVATE|MODE_APPEND);
-            out.write(text.getBytes());
-            out.write(10);
+    protected void writeItem(String dateTimeString){
 
-        }catch( IOException e ){
-            e.printStackTrace();
-        }
+        Item item = new Item();
+        item.dateAt = dateTimeString;
+        item.save();
+
     }
 
-    protected List<ListViewItemModel> loadItem(){
-        List<ListViewItemModel> list = new ArrayList<ListViewItemModel>();
-        try{
-            FileInputStream in = openFileInput("item.txt");
-            BufferedReader reader = new BufferedReader(new InputStreamReader( in , "UTF-8"));
-            String tmp;
-            while((tmp = reader.readLine()) != null){
-                list.add(new ListViewItemModel(tmp));
-            }
-            reader.close();
-        }catch( IOException e ){
-            e.printStackTrace();
-        }
-        Collections.reverse(list);
-        return list;
+    protected void deleteItem(){
+
+        new Delete().from(Item.class).execute();
+
+    }
+
+    protected List<Item> loadItem(){
+
+        List<Item> item = new Select()
+            .from(Item.class)
+            .orderBy("date_at DESC")
+            .execute();
+
+        return item;
+
     }
 }
