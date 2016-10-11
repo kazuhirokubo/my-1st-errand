@@ -31,7 +31,7 @@
 
 14. [x] RecyclerViewをListViewに置き換えて下さい(要git-flow)
 
-15. [ ] ActivieAndroidについて調べて、既存のものと置き換えて下さい
+15. [x] ActivieAndroidについて調べて、既存のものと置き換えて下さい
 
 16. [ ] [apiを用いて機能追加する](https://github.com/opdsk/my-1st-errand/issues/11)
 
