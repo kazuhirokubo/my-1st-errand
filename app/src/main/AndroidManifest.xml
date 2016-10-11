@@ -19,6 +19,9 @@
         <activity android:name=".Main2Activity" android:theme="@style/CustomTheme"></activity>
         <meta-data android:name="AA_DB_NAME" android:value="application.db" />
         <meta-data android:name="AA_DB_VERSION" android:value="1" />
+        <meta-data
+        android:name="AA_MODELS"
+        android:value="jp.co.a328w.kubox.learnactiveandroid.Item" />
     </application>
 
 </manifest>
