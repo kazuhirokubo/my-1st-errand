@@ -24,4 +24,6 @@
         android:value="jp.co.a328w.kubox.learnactiveandroid.Item" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
 </manifest>

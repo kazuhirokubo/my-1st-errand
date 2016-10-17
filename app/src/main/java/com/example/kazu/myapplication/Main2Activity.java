@@ -10,14 +10,9 @@ import com.activeandroid.Configuration;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.Date;
 import java.util.List;
 import butterknife.BindView;
