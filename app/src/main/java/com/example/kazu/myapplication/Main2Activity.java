@@ -64,14 +64,14 @@ public class Main2Activity extends Activity {
 
     }
 
+    /**
+     * [ログアウト]ボタン押下
+     */
     @OnClick(R.id.buttonLogout)
     protected void finishActivity(){
-//        mItemList.clear();
-//        mAdapter.notifyDataSetChanged();
-//
-//        deleteItem();
-//
-//        finish();
+        DeleteApi delItems = new DeleteApi(this);
+        delItems.execute();
+        finish();
     }
 
     /**
@@ -88,16 +88,6 @@ public class Main2Activity extends Activity {
         String nowDateTime = simpleDateFormat.format(date);
 
         loadItem();
-//        ItemModel item = new ItemModel("", "", nowDateTime, "");
-//        mItemList.add(item);
-//        mAdapter.notifyDataSetChanged();
-
-    }
-
-
-    protected void deleteItem(){
-
-//        new Delete().from(Item.class).execute();
 
     }
 
@@ -125,7 +115,7 @@ public class Main2Activity extends Activity {
 
 
     /*====================================================================================================
-     *
+     * item一覧を取得する
      *
      *
      ====================================================================================================*/
@@ -208,9 +198,6 @@ public class Main2Activity extends Activity {
 
     public class PostItemApi extends AsyncTask<String, Void, String> {
 
-        private Context mContext;
-        private ListViewAdapter mAdapter;
-
         public PostItemApi(Context context){
             mContext = context;
         }
@@ -286,6 +273,92 @@ public class Main2Activity extends Activity {
           */
         protected String InputStreamToString(InputStream is) throws IOException {
 
+            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                sb.append(line);
+            }
+            br.close();
+            return sb.toString();
+        }
+    }
+
+    /*====================================================================================================
+     * itemを削除する
+     *
+     *
+     ====================================================================================================*/
+
+    public class DeleteApi extends AsyncTask<String, Void, String> {
+
+        public DeleteApi(Context context) {
+            mContext = context;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            // 一番最初に実行される
+        }
+
+        @Override
+        protected String doInBackground(String... pass) {
+
+            HttpURLConnection con = null;
+            String result = "";
+            try {
+                con = (HttpURLConnection) new URL(
+                    "http://dev.domus.jp/kubox/practice/public/items").openConnection();
+                con.setRequestMethod("DELETE");
+                result = InputStreamToString(con.getInputStream());
+
+            } catch (IOException e) {
+                return "error";
+
+            } finally {
+                if (con != null) {
+                    con.disconnect();
+                }
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            AuthResponseModel res = null;
+
+            if (result.equals("error")) {
+                new AlertDialog.Builder(mContext)
+                    .setTitle("エラー")
+                    .setMessage("APIエラー(DELETE Items)")
+                    .setPositiveButton("OK", null)
+                    .show();
+                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
+                mListView.setAdapter(mAdapter);
+                return;
+            } else {
+                Gson gson = new Gson();
+                res = gson.fromJson(result, AuthResponseModel.class);
+            }
+
+            if (res.result.equals("false")) {
+                new AlertDialog.Builder(mContext)
+                    .setTitle("エラー")
+                    .setMessage("APIエラー(DELETE Items)")
+                    .setPositiveButton("OK", null)
+                    .show();
+            }
+
+            mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
+            mListView.setAdapter(mAdapter);
+            return;
+        }
+
+
+        // InputStream -> String
+        private String InputStreamToString(InputStream is) throws IOException {
             BufferedReader br = new BufferedReader(new InputStreamReader(is));
             StringBuilder sb = new StringBuilder();
             String line;
