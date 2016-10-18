@@ -28,10 +28,10 @@ import java.net.URL;
 
 public class AuthApi extends AsyncTask<String, Void, String> {
 
-    private Context context;
+    private Context mContext;
 
     public AuthApi(Context context){
-        this.context = context;
+        mContext = context;
     }
 
     @Override
@@ -43,8 +43,6 @@ public class AuthApi extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... pass) {
 
-        Log.d("==========", "http://dev.domus.jp/kubox/practice/public/auth/" + pass[0]);
-
         HttpURLConnection con = null;
         String result = "";
         try {
@@ -52,7 +50,7 @@ public class AuthApi extends AsyncTask<String, Void, String> {
             result = InputStreamToString(con.getInputStream());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return "error";
 
         } finally {
             if (con != null) {
@@ -64,24 +62,29 @@ public class AuthApi extends AsyncTask<String, Void, String> {
 
     @Override
     protected void onPostExecute(String result) {
-        Gson gson = new Gson();
-        AuthResponseModel res = gson.fromJson(result, AuthResponseModel.class);
 
-        if(res.result.equals("true")){
-            this.context.startActivity(new Intent(
-            this.context,
-            Main2Activity.class)
-            );
-            ((MainActivity) this.context).textViewPasswd.setText("");
-        }else {
+        AuthResponseModel res = null;
 
-            new AlertDialog.Builder(this.context)
+        if(result.equals("error")) {
+            new AlertDialog.Builder(mContext)
                 .setTitle("エラー")
-                .setMessage("認証エラー")
+                .setMessage("APIエラー(GET Auth)")
                 .setPositiveButton("OK", null)
                 .show();
+            return;
+        }else {
+            Gson gson = new Gson();
+            res = gson.fromJson(result, AuthResponseModel.class);
         }
-//        delegate.processFinish(res);
+
+        if(res.result.equals("true")){
+
+            mContext.startActivity(new Intent(
+                mContext,
+                Main2Activity.class)
+            );
+            ((MainActivity) mContext).textViewPasswd.setText("");
+        }
     }
 
 

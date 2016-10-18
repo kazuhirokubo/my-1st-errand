@@ -8,14 +8,6 @@ public class AuthResponseModel {
 
     public String result;
 
-    public String getResult(){
-        return this.result;
-    }
-
-    public void setResult(String result){
-        this.result = result;
-    }
-
     public AuthResponseModel(String result){
         this.result = result;
     }
