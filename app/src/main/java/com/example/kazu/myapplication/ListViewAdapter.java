@@ -18,14 +18,17 @@ import java.util.List;
 public class ListViewAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<Item> mItemList;
+    private List<ItemModel> mItemList;
     private int mLayoutId;
 
     static class ViewHolder {
-        TextView date;
+        TextView id;
+        TextView body;
+        TextView created_at;
+        TextView updated_at;
     }
 
-    public ListViewAdapter(Context context, int itemLayoutId, List<Item> itemList ){
+    public ListViewAdapter(Context context, int itemLayoutId, List<ItemModel> itemList ){
 
         mInflater = LayoutInflater.from(context);
         mLayoutId = itemLayoutId;
@@ -42,21 +45,31 @@ public class ListViewAdapter extends BaseAdapter {
             Log.d("convertView == null()", "position= "+position);
             convertView = mInflater.inflate(mLayoutId, null);
             holder = new ViewHolder();
-            holder.date = (TextView) convertView.findViewById(R.id.textViewDate);
+            holder.id = (TextView) convertView.findViewById(R.id.id);
+            holder.body = (TextView) convertView.findViewById(R.id.body);
+            holder.created_at = (TextView) convertView.findViewById(R.id.created_at);
+            holder.updated_at = (TextView) convertView.findViewById(R.id.updated_at);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Log.d("testUserName", mItemList.get(position).getDateAt());
+        Log.d("testUserName", mItemList.get(position).created_at);
 
-        holder.date.setText(mItemList.get(position).getDateAt());
+        holder.id.setText(mItemList.get(position).id);
+        holder.body.setText(mItemList.get(position).body);
+        holder.created_at.setText(mItemList.get(position).created_at);
+        holder.updated_at.setText(mItemList.get(position).updated_at);
         return convertView;
     }
 
     @Override
     public int getCount() {
-        return mItemList.size();
+        if(mItemList==null){
+            return 0;
+        }else {
+            return mItemList.size();
+        }
     }
 
     @Override

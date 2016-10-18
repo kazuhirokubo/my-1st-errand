@@ -41,32 +41,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         final String textPasswd = textViewPasswd.getText().toString();
 
         AuthApi auth = new AuthApi(this);
-
-//        AuthApi auth =new AuthApi(new AuthInterface() {
-//
-//            @Override
-//            public void processFinish(AuthResponseModel output) {
-//
-//                if(output.result.equals("true")){
-//
-//                    startActivity(new Intent(
-//                    MainActivity.this,
-//                    Main2Activity.class)
-//                    );
-//                    textViewPasswd.setText("");
-//
-//                }else{
-//                    Toast.makeText(MainActivity.this, "認証エラー", Toast.LENGTH_LONG).show();
-//
-////                    new AlertDialog.Builder(MainActivity.this)
-////                        .setTitle("title")
-////                        .setMessage("message")
-////                        .setPositiveButton("OK", null)
-////                        .show();
-//                }
-//            }
-//        });
-
         auth.execute(textPasswd);
 
 
