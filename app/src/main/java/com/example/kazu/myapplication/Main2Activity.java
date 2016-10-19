@@ -12,11 +12,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
-import com.activeandroid.ActiveAndroid;
-import com.activeandroid.Configuration;
-import com.activeandroid.query.Delete;
-import com.activeandroid.query.Select;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,7 +25,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
@@ -64,12 +60,14 @@ public class Main2Activity extends Activity {
 
     }
 
+
+
     /**
      * [ログアウト]ボタン押下
      */
     @OnClick(R.id.buttonLogout)
     protected void finishActivity(){
-        DeleteApi delItems = new DeleteApi(this);
+        DeleteItemsApi delItems = new DeleteItemsApi(this);
         delItems.execute();
         finish();
     }
@@ -290,9 +288,9 @@ public class Main2Activity extends Activity {
      *
      ====================================================================================================*/
 
-    public class DeleteApi extends AsyncTask<String, Void, String> {
+    public class DeleteItemsApi extends AsyncTask<String, Void, String> {
 
-        public DeleteApi(Context context) {
+        public DeleteItemsApi(Context context) {
             mContext = context;
         }
 

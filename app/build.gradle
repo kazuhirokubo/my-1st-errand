@@ -18,6 +18,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // 追記
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
