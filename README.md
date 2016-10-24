@@ -37,15 +37,15 @@
 
 17. [ ] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [ ] RxJavaについて調べて反映してください
+18. [ ] [RxJava](http://reactivex.io/)について調べて反映してください
 
 19. [ ] apiのテストを追加してください
 
 20. [ ] [ecentBus](https://github.com/greenrobot/EventBus)について調べて反映してください
 
-21. [ ] productFlavorについて調べて反映してください
+21. [ ] [productFlavor](http://vividcode.hatenablog.com/entry/android-app/build-variants)について調べて反映してください
 
-22. [ ] lintについて調べて反映してください
+22. [ ] [lint](http://dev.classmethod.jp/smartphone/android-tips-7-android-lint/)について調べて反映してください
 
 23. [ ] 多言語対応について調べて反映してください
 
