@@ -41,7 +41,7 @@
 
 19. [ ] apiのテストを追加してください
 
-20. [ ] ecentBusについて調べて反映してください
+20. [ ] [ecentBus](https://github.com/greenrobot/EventBus)について調べて反映してください
 
 21. [ ] productFlavorについて調べて反映してください
 
