@@ -33,5 +33,7 @@
 
 15. [x] ActivieAndroidについて調べて、既存のものと置き換えて下さい
 
-16. [ ] [apiを用いて機能追加する](https://github.com/opdsk/my-1st-errand/issues/11)
+16. [x] [apiを用いて機能追加する](https://github.com/opdsk/my-1st-errand/issues/11)
+
+17. [ ] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
