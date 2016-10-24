@@ -52,9 +52,10 @@ public class ListViewAdapter extends BaseAdapter {
         TextView updated_at;
     }
 
-    public ListViewAdapter(Context context, int itemLayoutId, List<ItemModel> itemList ){
+    public ListViewAdapter(Context context, int itemLayoutId, List<ItemModel> itemList){
 
         mInflater = LayoutInflater.from(context);
+        mContext = context;
         mLayoutId = itemLayoutId;
         mItemList = itemList;
     }
@@ -78,7 +79,7 @@ public class ListViewAdapter extends BaseAdapter {
         }
 
         /**
-         *
+         * 削除ボタン押下
          */
         Button deleteItemButton = (Button)convertView.findViewById(R.id.buttonDelete);
         deleteItemButton.setTag(position);
@@ -90,14 +91,18 @@ public class ListViewAdapter extends BaseAdapter {
                 int position = (Integer) v.getTag();
                 String id = mItemList.get(position).id;
 
+                Log.d("=====TEST=====", String.valueOf(position));
                 Log.d("=====TEST=====", "削除ボタン押下：id " + id + " を削除する");
                 DeleteItemApi delItem = new DeleteItemApi(id);
+                mItemList.remove(position);
+//                mAdapter.notifyDataSetChanged();
                 delItem.execute();
+
             }
         });
 
         /**
-         *
+         * 反映ボタン押下
          */
         Button updateItemButton = (Button)convertView.findViewById(R.id.buttonUpdate);
         updateItemButton.setTag(position);
@@ -196,22 +201,12 @@ public class ListViewAdapter extends BaseAdapter {
                     .show();
                 mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
                 mListView.setAdapter(mAdapter);
-                return;
             } else {
                 Gson gson = new Gson();
                 res = gson.fromJson(result, AuthResponseModel.class);
                 Log.d("=====TEST=====","VVVVV");
-            }
-
-            if (res.result.equals("false")) {
-                new AlertDialog.Builder(mContext)
-                    .setTitle("エラー")
-                    .setMessage("APIエラー(DELETE Item)")
-                    .setPositiveButton("OK", null)
-                    .show();
-                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
+                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, mItemList);
                 mListView.setAdapter(mAdapter);
-                return;
             }
 
 
