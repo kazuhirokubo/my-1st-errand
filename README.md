@@ -41,7 +41,7 @@
 
 19. [ ] apiのテストを追加してください
 
-20. [ ] [ecentBus](https://github.com/greenrobot/EventBus)について調べて反映してください
+20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて反映してください
 
 21. [ ] [productFlavor](http://vividcode.hatenablog.com/entry/android-app/build-variants)について調べて反映してください
 
@@ -59,4 +59,6 @@
 
 28. [ ] [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/)について調べて反映してください
 
+29. [ ] proguardについて調べて反映してください
 
+30. [ ] 本番用の署名について調べて反映してください
