@@ -37,13 +37,13 @@
 
 17. [x] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
+18. [x] RelativeLayoutで書き直してみてください
 
 19. [ ] 多言語対応について調べて反映してください
 
 20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて反映してください
 
-21. [x] RelativeLayoutで書き直してみてください
+21. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
 
 22. [ ] Applicationクラスに関して調べて反映してください（リファクタリング時必須）
 
