@@ -10,21 +10,23 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.example.kazu.myapplication.api.ApiService;
+import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.setting.Common;
 import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
-/**
- * Created by kubox on 2016/10/12.
- */
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+import static java.lang.Integer.parseInt;
+
 
 public class AuthApi extends AsyncTask<String, Void, String> {
 
@@ -43,61 +45,50 @@ public class AuthApi extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... pass) {
 
-        HttpURLConnection con = null;
-        String result = "";
-        try {
-            con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/auth/" + pass[0]).openConnection();
-            result = InputStreamToString(con.getInputStream());
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
-        } catch (IOException e) {
-            return "error";
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(Common.ENDPOINT_URL)  // 基本url
+                .addConverterFactory(GsonConverterFactory.create())     // Gson
+                .client(client)
+                .build();
 
-        } finally {
-            if (con != null) {
-                con.disconnect();
-            }
+        ApiService API = retrofit.create(ApiService.class);
+
+        int intPassword;
+        Judgement judge = new Judgement();
+        try{
+            intPassword = parseInt(pass[0]);
+            judge= API.apiAuth(intPassword).execute().body();
+        }catch (Exception ex){
+            judge.setResult(false);
         }
-        return result;
+
+        return judge.getResult().toString();
     }
 
     @Override
     protected void onPostExecute(String result) {
 
-        AuthResponseModel res = null;
+//        AuthResponseModel res = null;
 
-        if(result.equals("error")) {
-            new AlertDialog.Builder(mContext)
-                .setTitle("エラー")
-                .setMessage("APIエラー(GET Auth)")
-                .setPositiveButton("OK", null)
-                .show();
-            return;
-        }else {
-            Gson gson = new Gson();
-            res = gson.fromJson(result, AuthResponseModel.class);
-        }
 
-        if(res.result.equals("true")){
+        if(result.equals("true")){
 
             mContext.startActivity(new Intent(
                 mContext,
                 Main2Activity.class)
             );
             ((MainActivity) mContext).textViewPasswd.setText("");
+        }else{
+            new AlertDialog.Builder(mContext)
+                    .setTitle("エラー")
+                    .setMessage("APIエラー(GET Auth)")
+                    .setPositiveButton("OK", null)
+                    .show();
+            return;
         }
-    }
-
-
-
-    // InputStream -> String
-    static String InputStreamToString(InputStream is) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-        StringBuilder sb = new StringBuilder();
-        String line;
-        while ((line = br.readLine()) != null) {
-            sb.append(line);
-        }
-        br.close();
-        return sb.toString();
     }
 }

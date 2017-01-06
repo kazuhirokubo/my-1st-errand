@@ -17,6 +17,8 @@ import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Configuration;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
+import com.example.kazu.myapplication.api.ApiService;
+import com.example.kazu.myapplication.model.Item;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -37,6 +39,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class Main2Activity extends Activity {
@@ -135,10 +143,46 @@ public class Main2Activity extends Activity {
         @Override
         protected String doInBackground(Void... params) {
 
+            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("http://160.16.78.85/kubox/practice/public/")  // 基本url
+                    .addConverterFactory(GsonConverterFactory.create())     // Gson
+                    .client(client)
+                    .build();
+
+
+            //Interfaceから実装を取得
+            ApiService API = retrofit.create(ApiService.class);
+
+            API.apiItems().enqueue(new Callback<List<Item>>() {
+                @Override
+                public void onResponse(Call<List<Item>> call, retrofit2.Response<List<Item>> response) {
+                    if (response.isSuccessful()) {
+                        //通信結果をオブジェクトで受け取る
+                        List<Item> demo = response.body();
+                        Log.d("RETROFIT_TEST", "要素数:" + String.valueOf(demo.size()));
+
+                    } else {
+                        //通信が成功したが、エラーcodeが返ってきた場合はこちら
+                        Log.d("RETROFIT_TEST", "error_code" + response.code());
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Item>> call, Throwable t) {
+                    //通信が失敗した場合など
+                    Log.d("RETROFIT_TEST", "suck:" + t.getMessage());
+                }
+            });
+
             HttpURLConnection con = null;
             String result = "";
             try {
-                con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/items").openConnection();
+                con = (HttpURLConnection) new URL("items").openConnection();
                 result = InputStreamToString(con.getInputStream());
 
             } catch (IOException e) {
@@ -151,6 +195,9 @@ public class Main2Activity extends Activity {
             }
             return result;
         }
+
+
+
 
         @Override
         protected void onPostExecute(String result) {
@@ -255,7 +302,7 @@ public class Main2Activity extends Activity {
                 res = gson.fromJson(result, PostItemModel.class);
             }
 
-            if(res.id.isEmpty()){
+            if(res.getId().isEmpty()){
 
                 new AlertDialog.Builder(mContext)
                     .setTitle("エラー")

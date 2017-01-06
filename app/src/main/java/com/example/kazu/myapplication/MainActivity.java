@@ -1,20 +1,20 @@
 package com.example.kazu.myapplication;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import lombok.core.Main;
+
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
@@ -23,12 +23,18 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @BindView(R.id.buttonLogin) Button buttonLogin;
     @BindView(R.id.textPasswd) TextView textViewPasswd;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        ImageView imageView = (ImageView) findViewById(R.id.gifView);
+        GlideDrawableImageViewTarget target = new GlideDrawableImageViewTarget(imageView);
+        Glide.with(this).load(R.raw.mario).into(target);
+
     }
 
     /**
