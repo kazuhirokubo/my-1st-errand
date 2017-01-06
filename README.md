@@ -45,7 +45,7 @@
 
 21. [ ] RelativeLayoutで書き直してみてください
 
-22. [ ] Applicationクラス関して調べて反映してください
+22. [ ] Applicationクラスに関して調べて反映してください
 
 23. [ ] Fragmentに関して調べて反映してください
 
