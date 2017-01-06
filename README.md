@@ -37,28 +37,28 @@
 
 17. [ ] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [ ] [RxJava](http://reactivex.io/)について調べて反映してください
+18. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
 
-19. [ ] apiのテストを追加してください
+19. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて反映してください
 
-20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて反映してください
+20. [ ] 多言語対応について調べて反映してください
 
-21. [ ] [productFlavor](http://vividcode.hatenablog.com/entry/android-app/build-variants)について調べて反映してください
+21. [ ] RelativeLayoutで書き直してみてください
 
-22. [ ] [lint](http://dev.classmethod.jp/smartphone/android-tips-7-android-lint/)について調べて反映してください
+22. [ ] Applicationクラス関して調べて反映してください
 
-23. [ ] 多言語対応について調べて反映してください
+23. [ ] Fragmentに関して調べて反映してください
 
-24. [ ] RelativeLayoutで書き直してみてください
+24. [ ] [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/)について調べて反映してください
 
-25. [ ] Applicationクラス関して調べて反映してください
+25. [ ] [lint](http://dev.classmethod.jp/smartphone/android-tips-7-android-lint/)について調べて反映してください
 
-26. [ ] Fragmentに関して調べて反映してください
+26. [ ] [productFlavor](http://vividcode.hatenablog.com/entry/android-app/build-variants)について調べて反映してください
 
 27. [ ] [spoon](http://square.github.io/spoon/)について調べて反映してください
 
-28. [ ] [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/)について調べて反映してください
+28. [ ] proguardについて調べて反映してください
 
-29. [ ] proguardについて調べて反映してください
+29. [ ] 本番用の署名について調べて反映してください
 
-30. [ ] 本番用の署名について調べて反映してください
+30. [ ] [RxJava](http://reactivex.io/)について調べて反映してください
