@@ -37,7 +37,7 @@
 
 17. [x] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [x] RelativeLayoutで書き直してみてください
+18. [ ] Listview内に左寄せで[Glide](https://github.com/bumptech/glide)を用いて画像を表示させてください
 
 19. [ ] 多言語対応について調べて反映してください
 
