@@ -37,7 +37,13 @@
 
 17. [x] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [x] RelativeLayoutで書き直してみてください
+18. [ ] Listview内に左寄せで[Glide](https://github.com/bumptech/glide)を用いてリサイズした画像を表示させてください
+    
+    18. [ ] ListView上に表示する画像はHTTPアクセスで動的に取得すること
+
+    18. [ ] オフライン時はローカル保存した画像を表示すること
+
+    18. [ ] HTTPアクセスした画像はGlideの機能を使ってキャッシュすること
 
 19. [ ] 多言語対応について調べて反映してください
 
