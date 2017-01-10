@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.example.kazu.myapplication.model.Item;
+
 import java.util.List;
 
 /**
@@ -18,7 +20,7 @@ import java.util.List;
 public class ListViewAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private List<ItemModel> mItemList;
+    private List<Item> mItemList;
     private int mLayoutId;
 
     static class ViewHolder {
@@ -28,7 +30,7 @@ public class ListViewAdapter extends BaseAdapter {
         TextView updated_at;
     }
 
-    public ListViewAdapter(Context context, int itemLayoutId, List<ItemModel> itemList ){
+    public ListViewAdapter(Context context, int itemLayoutId, List<Item> itemList ){
 
         mInflater = LayoutInflater.from(context);
         mLayoutId = itemLayoutId;
@@ -40,13 +42,12 @@ public class ListViewAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
-
         if (convertView == null) {
             Log.d("convertView == null()", "position= "+position);
             convertView = mInflater.inflate(mLayoutId, null);
             holder = new ViewHolder();
             holder.id = (TextView) convertView.findViewById(R.id.id);
-            holder.body = (TextView) convertView.findViewById(R.id.body);
+//            holder.body = (TextView) convertView.findViewById(R.id.body);
             holder.created_at = (TextView) convertView.findViewById(R.id.created_at);
             holder.updated_at = (TextView) convertView.findViewById(R.id.updated_at);
             convertView.setTag(holder);
@@ -54,12 +55,10 @@ public class ListViewAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Log.d("testUserName", mItemList.get(position).created_at);
-
-        holder.id.setText(mItemList.get(position).id);
-        holder.body.setText(mItemList.get(position).body);
-        holder.created_at.setText(mItemList.get(position).created_at);
-        holder.updated_at.setText(mItemList.get(position).updated_at);
+        holder.id.setText(String.valueOf(mItemList.get(position).getId()));
+//        holder.body.setText(mItemList.get(position).getBody());
+        holder.created_at.setText(mItemList.get(position).getCreated_at());
+        holder.updated_at.setText(mItemList.get(position).getUpdated_at());
         return convertView;
     }
 

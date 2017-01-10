@@ -18,7 +18,10 @@ import com.activeandroid.Configuration;
 import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 import com.example.kazu.myapplication.api.ApiService;
+import com.example.kazu.myapplication.api.RestClient;
+import com.example.kazu.myapplication.model.CreatedItem;
 import com.example.kazu.myapplication.model.Item;
+import com.example.kazu.myapplication.model.Judgement;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -43,6 +46,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -51,7 +55,7 @@ public class Main2Activity extends Activity {
 
     @BindView(R.id.listview)
     ListView mListView;
-    private List<ItemModel> mItemList;
+    private List<Item> mItemList;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Context mContext;
     private ListViewAdapter mAdapter;
@@ -68,8 +72,6 @@ public class Main2Activity extends Activity {
         ButterKnife.bind(this);
 
         loadItem();
-
-
     }
 
     /**
@@ -77,8 +79,20 @@ public class Main2Activity extends Activity {
      */
     @OnClick(R.id.buttonLogout)
     protected void finishActivity(){
-        DeleteApi delItems = new DeleteApi(this);
-        delItems.execute();
+//        DeleteApi delItems = new DeleteApi(this);
+//        delItems.execute();
+        RestClient restClient = new RestClient();
+        restClient.deleteItems().enqueue(new Callback<Judgement>() {
+            @Override
+            public void onResponse(Call<Judgement> call, Response<Judgement> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<Judgement> call, Throwable t) {
+
+            }
+        });
         finish();
     }
 
@@ -89,11 +103,11 @@ public class Main2Activity extends Activity {
     protected void addItem(){
 
         PostItemApi postItem = new PostItemApi(this);
-        postItem.execute();
+        postItem.response();
 
-        Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String nowDateTime = simpleDateFormat.format(date);
+//        Date date = new Date();
+//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String nowDateTime = simpleDateFormat.format(date);
 
         loadItem();
 
@@ -102,7 +116,7 @@ public class Main2Activity extends Activity {
     protected void loadItem(){
 
         GetItemsApi getItems = new GetItemsApi(this, mListView);
-        getItems.execute();
+        getItems.request();
 
     }
 
@@ -127,113 +141,36 @@ public class Main2Activity extends Activity {
      *
      *
      ====================================================================================================*/
-    public class GetItemsApi extends AsyncTask<Void, Void, String> {
+    public class GetItemsApi {
 
         public GetItemsApi(Context context, ListView listView){
             mContext = context;
             mListView = listView;
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // 一番最初に実行される
-        }
+        public void request(){
 
-        @Override
-        protected String doInBackground(Void... params) {
+            RestClient restClient = new RestClient();
+            restClient.getItems().enqueue(new Callback<List<Item>>() {
 
-            HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-            interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://160.16.78.85/kubox/practice/public/")  // 基本url
-                    .addConverterFactory(GsonConverterFactory.create())     // Gson
-                    .client(client)
-                    .build();
-
-
-            //Interfaceから実装を取得
-            ApiService API = retrofit.create(ApiService.class);
-
-            API.apiItems().enqueue(new Callback<List<Item>>() {
                 @Override
-                public void onResponse(Call<List<Item>> call, retrofit2.Response<List<Item>> response) {
-                    if (response.isSuccessful()) {
-                        //通信結果をオブジェクトで受け取る
-                        List<Item> demo = response.body();
-                        Log.d("RETROFIT_TEST", "要素数:" + String.valueOf(demo.size()));
+                public void onResponse(Call <List<Item>> call, Response <List<Item>> response){
 
-                    } else {
-                        //通信が成功したが、エラーcodeが返ってきた場合はこちら
-                        Log.d("RETROFIT_TEST", "error_code" + response.code());
+                    if (response.isSuccessful())
+                    {
+//                        Log.d("GetItemsApi", response.body().get(0).getBody());
+                        ListViewAdapter mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, response.body());
+                        mListView.setAdapter(mAdapter);
+                    }else{
 
                     }
                 }
 
                 @Override
                 public void onFailure(Call<List<Item>> call, Throwable t) {
-                    //通信が失敗した場合など
-                    Log.d("RETROFIT_TEST", "suck:" + t.getMessage());
+                    Log.d("GetItemsApi", "Not 200");
                 }
             });
-
-            HttpURLConnection con = null;
-            String result = "";
-            try {
-                con = (HttpURLConnection) new URL("items").openConnection();
-                result = InputStreamToString(con.getInputStream());
-
-            } catch (IOException e) {
-                return "error";
-
-            } finally {
-                if (con != null) {
-                    con.disconnect();
-                }
-            }
-            return result;
-        }
-
-
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            if(result.equals("error")) {
-                new AlertDialog.Builder(mContext)
-                    .setTitle("エラー")
-                    .setMessage("APIエラー(GET Items)")
-                    .setPositiveButton("OK", null)
-                    .show();
-                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
-                mListView.setAdapter(mAdapter);
-                return;
-            } else {
-                result = result.replace("null", "\"\"");
-                Gson gson = new Gson();
-                mItemList = new ArrayList<ItemModel>();
-                mItemList = gson.fromJson(result, new TypeToken<List<ItemModel>>() {
-                }.getType());
-                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, mItemList);
-                mListView.setAdapter(mAdapter);
-            }
-        }
-
-        /*
-         InputStream -> String
-          */
-        protected String InputStreamToString(InputStream is) throws IOException {
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            br.close();
-            return sb.toString();
         }
     }
 
@@ -243,92 +180,112 @@ public class Main2Activity extends Activity {
      *
      ====================================================================================================*/
 
-    public class PostItemApi extends AsyncTask<String, Void, String> {
+    public class PostItemApi {
 
         public PostItemApi(Context context){
             mContext = context;
         }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            // 一番最初に実行される
-        }
+        public void response(){
+            RestClient restClient = new RestClient();
+            restClient.postItem("nobody").enqueue(new Callback<CreatedItem>() {
+                @Override
+                public void onResponse(Call<CreatedItem> call, Response<CreatedItem> response) {
+                    if (response.isSuccessful())
+                    {
 
-        @Override
-        protected String doInBackground(String... params) {
+                    }else{
 
-            String postString = ".";
-            HttpURLConnection con = null;
-            OutputStream out = null;
-
-            String result = "";
-            try {
-                con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/item").openConnection();
-                con.setRequestMethod("POST");
-                out = con.getOutputStream();
-                out.write(postString.getBytes("UTF-8"));
-                out.flush();
-                out.close();
-                result = InputStreamToString(con.getInputStream());
-
-            } catch (Exception e) {
-                result = "error";
-
-            } finally {
-                if (con != null) {
-                    con.disconnect();
+                    }
                 }
-            }
-            return result;
+
+                @Override
+                public void onFailure(Call<CreatedItem> call, Throwable t) {
+
+                }
+            });
         }
-
-        @Override
-        protected void onPostExecute(String result) {
-
-            PostItemModel res = null;
-
-            if(result.equals("error")) {
-                new AlertDialog.Builder(mContext)
-                    .setTitle("エラー")
-                    .setMessage("APIエラー(POST Item)")
-                    .setPositiveButton("OK", null)
-                    .show();
-                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
-                mListView.setAdapter(mAdapter);
-                return;
-            }else {
-                Gson gson = new Gson();
-                res = gson.fromJson(result, PostItemModel.class);
-            }
-
-            if(res.getId().isEmpty()){
-
-                new AlertDialog.Builder(mContext)
-                    .setTitle("エラー")
-                    .setMessage("APIエラー(POST Item)")
-                    .setPositiveButton("OK", null)
-                    .show();
-                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
-                mListView.setAdapter(mAdapter);
-                return;
-            }
-        }
-
-        /*
-         InputStream -> String
-          */
-        protected String InputStreamToString(InputStream is) throws IOException {
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(is));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = br.readLine()) != null) {
-                sb.append(line);
-            }
-            br.close();
-            return sb.toString();
-        }
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            // 一番最初に実行される
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//
+//            String postString = ".";
+//            HttpURLConnection con = null;
+//            OutputStream out = null;
+//
+//            String result = "";
+//            try {
+//                con = (HttpURLConnection) new URL("http://dev.domus.jp/kubox/practice/public/item").openConnection();
+//                con.setRequestMethod("POST");
+//                out = con.getOutputStream();
+//                out.write(postString.getBytes("UTF-8"));
+//                out.flush();
+//                out.close();
+//                result = InputStreamToString(con.getInputStream());
+//
+//            } catch (Exception e) {
+//                result = "error";
+//
+//            } finally {
+//                if (con != null) {
+//                    con.disconnect();
+//                }
+//            }
+//            return result;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String result) {
+//
+//            CreatedItem res = null;
+//
+//            if(result.equals("error")) {
+//                new AlertDialog.Builder(mContext)
+//                    .setTitle("エラー")
+//                    .setMessage("APIエラー(POST Item)")
+//                    .setPositiveButton("OK", null)
+//                    .show();
+//                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
+//                mListView.setAdapter(mAdapter);
+//                return;
+//            }else {
+//                Gson gson = new Gson();
+//                res = gson.fromJson(result, CreatedItem.class);
+//            }
+//
+//            if(res.getId().isEmpty()){
+//
+//                new AlertDialog.Builder(mContext)
+//                    .setTitle("エラー")
+//                    .setMessage("APIエラー(POST Item)")
+//                    .setPositiveButton("OK", null)
+//                    .show();
+//                mAdapter = new ListViewAdapter(mContext, R.layout.listview_row, null);
+//                mListView.setAdapter(mAdapter);
+//                return;
+//            }
+//        }
+//
+//        /*
+//         InputStream -> String
+//          */
+//        protected String InputStreamToString(InputStream is) throws IOException {
+//
+//            BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//            StringBuilder sb = new StringBuilder();
+//            String line;
+//            while ((line = br.readLine()) != null) {
+//                sb.append(line);
+//            }
+//            br.close();
+//            return sb.toString();
+//        }
     }
 
     /*====================================================================================================
@@ -374,7 +331,7 @@ public class Main2Activity extends Activity {
         @Override
         protected void onPostExecute(String result) {
 
-            AuthResponseModel res = null;
+            Judgement res = null;
 
             if (result.equals("error")) {
                 new AlertDialog.Builder(mContext)
@@ -387,10 +344,10 @@ public class Main2Activity extends Activity {
                 return;
             } else {
                 Gson gson = new Gson();
-                res = gson.fromJson(result, AuthResponseModel.class);
+                res = gson.fromJson(result, Judgement.class);
             }
 
-            if (res.result.equals("false")) {
+            if (res.getResult().equals("false")) {
                 new AlertDialog.Builder(mContext)
                     .setTitle("エラー")
                     .setMessage("APIエラー(DELETE Items)")

@@ -28,8 +28,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
     compile 'com.google.code.gson:gson:2.7'
-    provided 'org.projectlombok:lombok:1.14.8'
-    apt "org.projectlombok:lombok:1.14.8"
+
+    //1.14.8
+
+    provided 'org.projectlombok:lombok:1.16.12'
+    apt "org.projectlombok:lombok:1.16.12"
 
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'

@@ -23,10 +23,10 @@ import retrofit2.http.Path;
 
 public interface ApiService {
     @GET("auth/{id}")
-    Call<Judgement> apiAuth(@Path("id") int id);
+    Call<Judgement> apiAuth(@Path("id") String password);
 
     @GET("items")
-    Call<List<Item>> apiItems();
+    Call<List<Item>> apiGetItems();
 
     @FormUrlEncoded
     @POST("item")

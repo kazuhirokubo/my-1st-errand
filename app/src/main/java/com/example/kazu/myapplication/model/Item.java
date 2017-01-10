@@ -1,5 +1,6 @@
 package com.example.kazu.myapplication.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  */
 
 @Data
+@AllArgsConstructor(suppressConstructorProperties = true)
 public class Item {
     private int id;
     private String body;
