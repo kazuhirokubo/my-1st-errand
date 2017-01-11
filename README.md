@@ -45,9 +45,11 @@
 
     18. [ ] HTTPアクセスした画像はGlideの機能を使ってキャッシュすること
 
-19. [ ] 多言語対応について調べて反映してください
+19. [x] 多言語対応について調べて反映してください
 
-20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて反映してください
+20. [ ] ログイン画面にアカウント名を入力できるようにし、ログイン後のListページでそのアカウント名がヘッダに表示されるようにする（Intentで受け渡す）
+
+20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて、上記Intent部分をEventBusで差し替えてください
 
 21. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
 
