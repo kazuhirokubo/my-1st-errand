@@ -37,19 +37,19 @@
 
 17. [x] apiをハンドリングしている部分を[retrofit2](https://github.com/square/retrofit)というライブラリで書き換えてください
 
-18. [ ] Listview内に左寄せで[Glide](https://github.com/bumptech/glide)を用いてリサイズした画像を表示させてください
+18. [x] Listview内に左寄せで[Glide](https://github.com/bumptech/glide)を用いてリサイズした画像を表示させてください
     
-    18. [ ] ListView上に表示する画像はHTTPアクセスで動的に取得すること
+    18. [x] ListView上に表示する画像はHTTPアクセスで動的に取得すること
 
-    18. [ ] オフライン時はローカル保存した画像を表示すること
+    18. [x] オフライン時はローカル保存した画像を表示すること
 
-    18. [ ] HTTPアクセスした画像はGlideの機能を使ってキャッシュすること
+    18. [x] HTTPアクセスした画像はGlideの機能を使ってキャッシュすること
 
 19. [x] 多言語対応について調べて反映してください
 
-20. [ ] ログイン画面にアカウント名を入力できるようにし、ログイン後のListページでそのアカウント名がヘッダに表示されるようにする（Intentで受け渡す）
+20. [x] ログイン画面にアカウント名を入力できるようにし、ログイン後のListページでそのアカウント名がヘッダに表示されるようにする（Intentで受け渡す）
 
-20. [ ] [eventBus](https://github.com/greenrobot/EventBus)について調べて、上記Intent部分をEventBusで差し替えてください
+20. [x] [eventBus](https://github.com/greenrobot/EventBus)について調べて、上記Intent部分をEventBusで差し替えてください
 
 21. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
 
@@ -57,6 +57,12 @@
 
 23. [ ] Fragmentに関して調べて反映してください（リファクタリング時必須）
 
+23. [ ] Espressoでテストするため、ログイン名及びパスワードにバリデーション処理を入れる
+
+    23. [ ] メアドでないとだめで、エラーダイアログを出す
+    
+    23. [ ] パスワードは4文字以上8文字以下でないとエラーダイアログを出す
+    
 24. [ ] [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/)について調べて反映してください（UIテスト）
 
 25. [ ] [spoon](http://square.github.io/spoon/)について調べて反映してください（UIテスト）
