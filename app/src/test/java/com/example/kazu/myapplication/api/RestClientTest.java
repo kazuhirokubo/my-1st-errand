@@ -4,6 +4,8 @@ import android.os.Build;
 import android.support.compat.BuildConfig;
 
 import com.example.kazu.myapplication.api.test.Fixture;
+import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.setting.Common;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -40,21 +42,29 @@ public class RestClientTest {
 
     @Before
     public void Setup() throws Exception{
+
         mMockServer = new MockWebServer();
         mMockServer.start();
-        System.out.println("op");
+        mClient = new RestClient();
+        mBuilder = mClient.getServiceBuilder();
+
+        System.out.println("SETUP OK");
 
     }
 
     @Test(timeout = 500)
     public void ユーザ情報とペア情報が返る() throws Exception {
 
-        //.getHttpClientBuilder().addInterceptor(
-//        mClient.auth("1234").
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("auth/valid_post_auth.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+        Judgement auth = service.apiAuth("1234").execute().body();
 
         System.out.println("opdksgdz");
-        String a = "a";
-        assertThat(a).isEqualTo("a");
+
+        assertThat(auth.getResult()).isEqualTo(true);
     }
 
     private Interceptor getStubClient(final String fixture) {
