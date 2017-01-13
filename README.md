@@ -53,10 +53,6 @@
 
 21. [ ] [apiのテストをRobolectricを用いて追加してください](http://robolectric.org/)
 
-22. [ ] Applicationクラスに関して調べて反映してください（リファクタリング時必須）
-
-23. [ ] Fragmentに関して調べて反映してください（リファクタリング時必須）
-
 23. [ ] Espressoでテストするため、ログイン名及びパスワードにバリデーション処理を入れる
 
 
@@ -67,6 +63,10 @@
 24. [ ] [Espresso](https://google.github.io/android-testing-support-library/docs/espresso/)について調べて反映してください（UIテスト）
 
 25. [ ] [spoon](http://square.github.io/spoon/)について調べて反映してください（UIテスト）
+
+22. [ ] Applicationクラスに関して調べて反映してください（リファクタリング時必須）
+
+23. [ ] Fragmentに関して調べて反映してください（リファクタリング時必須）
 
 26. [ ] [lint](http://dev.classmethod.jp/smartphone/android-tips-7-android-lint/)について調べて反映してください
 
