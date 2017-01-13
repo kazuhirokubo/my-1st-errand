@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.kazu.myapplication.api.RestClient;
 import com.example.kazu.myapplication.model.Judgement;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,10 +26,11 @@ import retrofit2.Response;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
+    private static final EventBus BUS = new EventBus();
 
     @BindView(R.id.buttonLogin) Button buttonLogin;
+    @BindView(R.id.textUserName) TextView textViewUserName;
     @BindView(R.id.textPasswd) TextView textViewPasswd;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     }
 
+
     /**
      * ログインボタン押下時
      * @param view
@@ -57,11 +59,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
         restClient.auth(textPasswd).enqueue(new Callback<Judgement>() {
             @Override
             public void onResponse(Call<Judgement> call, Response<Judgement> response) {
+
                 if (response.isSuccessful()) {
 
                     Log.d("*****", response.body().getResult().toString());
 
                     if(response.body().getResult() == true){
+
+                        BusProvider.getInstance().postSticky(new MessageEvent(textViewUserName.getText().toString()));
 
                         Intent intent = new Intent(MainActivity.this, Main2Activity.class);
                         startActivity(intent);

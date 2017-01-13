@@ -24,6 +24,14 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="text"
+            android:ems="10"
+            android:id="@+id/textUserName"
+            android:maxLength="10" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:inputType="numberPassword"
             android:ems="10"
             android:id="@+id/textPasswd"
@@ -32,7 +40,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ログイン"
+            android:text="@string/button_Login"
             android:id="@+id/buttonLogin" />
     </LinearLayout>
 </RelativeLayout>

@@ -26,6 +26,7 @@ public class RestClient {
     public RestClient(){
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
         OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
 
         mApiService = new Retrofit.Builder()
