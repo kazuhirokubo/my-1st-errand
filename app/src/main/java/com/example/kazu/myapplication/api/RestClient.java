@@ -43,13 +43,12 @@ public class RestClient {
 
     public RestClient() {
 
-//        mApiUrl = url;
         mApiService = new Retrofit.Builder()
                 .baseUrl(Common.ENDPOINT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(getHttpClientBuilder()
-                        .build()).build().create(ApiService.class);
+                .build()).build().create(ApiService.class);
     }
 
     public Retrofit.Builder getServiceBuilder() {
@@ -75,18 +74,6 @@ public class RestClient {
                         Request original = chain.request();
 
                         Request.Builder builder = original.newBuilder();
-
-                        //X-ApplicationVersion
-                        //X-PlatformOs
-//                        String applicationVersion = .getInstance().getVersionName();
-//                        String platformOS = "Android/" + String.valueOf(HeartIsInApplication.getInstance().getReleaseVersion());
-//                        builder.addHeader("X-ApplicationVersion", applicationVersion);
-//                        builder.addHeader("X-PlatformOs", platformOS);
-
-                        // POST時にlibcore.io.Streams.readAsciiLine()でjava.io.EOFExceptionがスローされるandroidのバグの回避策
-                        // KITCAT以降のOSもLTEだとおかしかった
-                        builder.addHeader("Connection", "close");
-
                         builder.method(original.method(), original.body());
                         Request request = builder.build();
 
