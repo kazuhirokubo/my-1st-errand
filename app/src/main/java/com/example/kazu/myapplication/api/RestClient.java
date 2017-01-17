@@ -28,25 +28,11 @@ public class RestClient {
 
     private ApiService mApiService;
 
-//    public RestClient(){
-//        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-//        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-//
-//        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
-//
-//        mApiService = new Retrofit.Builder()
-//                .baseUrl(Common.ENDPOINT_URL)                           // 基本url
-//                .addConverterFactory(GsonConverterFactory.create())     // Gson
-//                .client(client)
-//                .build().create(ApiService.class);
-//    }
-
     public RestClient() {
 
         mApiService = new Retrofit.Builder()
                 .baseUrl(Common.ENDPOINT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(getHttpClientBuilder()
                 .build()).build().create(ApiService.class);
     }
@@ -55,7 +41,6 @@ public class RestClient {
         return new Retrofit.Builder()
                 .baseUrl(Common.ENDPOINT_URL)
                 .addConverterFactory(GsonConverterFactory.create())
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(getHttpClientBuilder().build());
     }
 

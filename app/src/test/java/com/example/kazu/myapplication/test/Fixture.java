@@ -1,4 +1,4 @@
-package com.example.kazu.myapplication.api.test;
+package com.example.kazu.myapplication.test;
 
 /**
  * Created by kbx on 2017/01/13.
@@ -17,6 +17,7 @@ public class Fixture {
 
     public static String load(String path) throws IOException {
         FsFile fixturePath = Fs.currentDirectory().join("src", "test", "fixtures");
+        System.out.println(fixturePath.join(path).getInputStream());
         return Strings.fromStream(fixturePath.join(path).getInputStream());
     }
 

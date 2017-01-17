@@ -1,8 +1,11 @@
 package com.example.kazu.myapplication;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.example.kazu.myapplication.api.RestClient;
 import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.validation.Common;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,37 +57,76 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @OnClick(R.id.buttonLogin)
     public void onClick(View view) {
 
+        final String userName = textViewUserName.getText().toString();
         final String textPasswd = textViewPasswd.getText().toString();
 
-        RestClient restClient = new RestClient();
-        restClient.auth(textPasswd).enqueue(new Callback<Judgement>() {
-            @Override
-            public void onResponse(Call<Judgement> call, Response<Judgement> response) {
+        boolean isMailAddress = Common.isMailAddress(userName);
+        boolean isRequiredLength = Common.isRequiredLength(textPasswd);
 
-                if (response.isSuccessful()) {
+        if (isMailAddress == true && isRequiredLength == true) {
 
-                    Log.d("*****", response.body().getResult().toString());
+            RestClient restClient = new RestClient();
+            restClient.auth(textPasswd).enqueue(new Callback<Judgement>() {
+                @Override
+                public void onResponse(Call<Judgement> call, Response<Judgement> response) {
 
-                    if(response.body().getResult() == true){
+                    if (response.isSuccessful()) {
 
-                        BusProvider.getInstance().postSticky(new MessageEvent(textViewUserName.getText().toString()));
+                        Log.d("*****", response.body().getResult().toString());
 
-                        Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                        startActivity(intent);
+                        if (response.body().getResult() == true) {
 
-                        textViewPasswd.setText("");
+                            BusProvider.getInstance().postSticky(new MessageEvent(textViewUserName.getText().toString()));
+
+                            Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                            startActivity(intent);
+
+                            textViewPasswd.setText("");
+                        }
+
+                    } else {
+                        Log.d("*****", "Not 200");
                     }
-
-                }else{
-                    Log.d("*****", "Not 200");
                 }
+
+                @Override
+                public void onFailure(Call<Judgement> call, Throwable t) {
+                    Log.d("*****", "Fail");
+                }
+            });
+
+        }else{
+            if (isMailAddress == false) {
+
+                AlertDialog.Builder alertMailAddress = new AlertDialog.Builder(MainActivity.this);
+                alertMailAddress.setMessage("メールアドレスを入力してください");
+                alertMailAddress.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        textViewUserName.setText("");
+                        textViewUserName.requestFocus();
+                    }
+                });
+                alertMailAddress.show();
+                return;
             }
 
-            @Override
-            public void onFailure(Call<Judgement> call, Throwable t) {
-                Log.d("*****", "Fail");
+            if (isRequiredLength == false) {
+
+                AlertDialog.Builder alertMailAddress = new AlertDialog.Builder(MainActivity.this);
+                alertMailAddress.setMessage("パスワードは４〜8文字で入力してください");
+                alertMailAddress.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        textViewPasswd.setText("");
+                        textViewPasswd.requestFocus();
+                    }
+                });
+                alertMailAddress.show();
+                return;
             }
-        });
+
+        }
     }
 
 }

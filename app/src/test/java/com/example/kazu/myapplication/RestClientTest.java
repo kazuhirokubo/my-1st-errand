@@ -1,16 +1,19 @@
-package com.example.kazu.myapplication.api;
+package com.example.kazu.myapplication;
 
 import android.os.Build;
-import android.support.compat.BuildConfig;
 
-import com.example.kazu.myapplication.api.test.Fixture;
+import com.example.kazu.myapplication.api.ApiService;
+import com.example.kazu.myapplication.api.RestClient;
 import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.test.Fixture;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.res.Fs;
+import org.robolectric.res.FsFile;
 
 import java.io.IOException;
 
@@ -34,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class RestClientTest {
 
     private MockWebServer mMockServer;
-    private MockResponse mMockResponse;
+    private MockResponse mMockResponse = new MockResponse();
 
     Retrofit.Builder mBuilder;
     RestClient mClient;
@@ -46,27 +49,30 @@ public class RestClientTest {
         mMockServer.start();
 
         mClient = new RestClient();
-//        mBuilder = mClient.getServiceBuilder();
+        mBuilder = mClient.getServiceBuilder();
+
+//        FsFile fixturesPath = Fs.currentDirectory();
+//
+//        System.out.println(fixturesPath);
 
         System.out.println("SETUP OK");
-
     }
 
     @Test(timeout = 500)
     public void パスワード認証の結果を返す() throws Exception {
-        System.out.println("TEST OK");
 
-//        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("auth/valid_post_auth.json")).build());
-//        mMockServer.enqueue(mMockResponse);
-//
-//        Retrofit retrofit = mBuilder.build();
-//        final ApiService service = retrofit.create(ApiService.class);
-//        Judgement auth = service.apiAuth("1234").execute().body();
-//
-//        System.out.println("opdksgdz");
-////
-//        assertThat(auth.getResult()).isEqualTo(true);
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("auth/valid_post_auth.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        Judgement auth = service.apiAuth("1234").execute().body();
+        assertThat(auth.getResult()).isEqualTo(true);
+
+        System.out.println("TEST OK");
     }
+
 
     private Interceptor getStubClient(final String fixture) {
         return new Interceptor() {
