@@ -4,7 +4,10 @@ import android.os.Build;
 
 import com.example.kazu.myapplication.api.ApiService;
 import com.example.kazu.myapplication.api.RestClient;
+import com.example.kazu.myapplication.model.CreatedItem;
+import com.example.kazu.myapplication.model.Item;
 import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.model.UpdatedItem;
 import com.example.kazu.myapplication.test.Fixture;
 
 import org.junit.Before;
@@ -12,10 +15,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.res.Fs;
-import org.robolectric.res.FsFile;
+
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
@@ -51,10 +54,6 @@ public class RestClientTest {
         mClient = new RestClient();
         mBuilder = mClient.getServiceBuilder();
 
-//        FsFile fixturesPath = Fs.currentDirectory();
-//
-//        System.out.println(fixturesPath);
-
         System.out.println("SETUP OK");
     }
 
@@ -73,6 +72,83 @@ public class RestClientTest {
         System.out.println("TEST OK");
     }
 
+
+    @Test(timeout = 500)
+    public void アイテム一覧を取得する() throws Exception {
+
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("items/valid_get_items.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        List<Item> itemList = service.apiGetItems().execute().body();
+        assertThat(itemList.get(1).getBody()).isEqualTo("test_ok@gmail.com");
+
+        System.out.println("TEST OK");
+    }
+
+
+    @Test(timeout = 500)
+    public void アイテムを投稿する() throws Exception {
+
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("item/valid_post_item.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        CreatedItem item = service.apiPostItem("kubox@328w.co.jp").execute().body();
+        assertThat(item.getBody()).isEqualTo("kubox@328w.co.jp");
+
+        System.out.println("TEST OK");
+    }
+
+
+    @Test(timeout = 500)
+    public void すべてのアイテムを削除する() throws Exception {
+
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("items/valid_delete_items.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        Judgement judge = service.apiDeleteItems().execute().body();
+        assertThat(judge.getResult()).isEqualTo(true);
+
+        System.out.println("TEST OK");
+    }
+
+    @Test(timeout = 500)
+    public void 指定したアイテムを削除する() throws Exception {
+
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("item/valid_delete_item.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        Judgement judge = service.apiDeleteItem(1).execute().body();
+        assertThat(judge.getResult()).isEqualTo(true);
+
+        System.out.println("TEST OK");
+    }
+
+    @Test(timeout = 500)
+    public void 指定したアイテムを更新する() throws Exception {
+
+        mBuilder.client(mClient.getHttpClientBuilder().addInterceptor(getStubClient("item/valid_put_item.json")).build());
+        mMockServer.enqueue(mMockResponse);
+
+        Retrofit retrofit = mBuilder.build();
+        final ApiService service = retrofit.create(ApiService.class);
+
+        UpdatedItem item = service.apiPutItem(1, "put_item@gmail.com").execute().body();
+        assertThat(item.getBody()).isEqualTo("put_item@gmail.com");
+
+        System.out.println("TEST OK");
+    }
 
     private Interceptor getStubClient(final String fixture) {
         return new Interceptor() {

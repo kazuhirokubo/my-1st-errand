@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.kazu.myapplication.model.CreatedItem;
 import com.example.kazu.myapplication.model.Item;
 import com.example.kazu.myapplication.model.Judgement;
+import com.example.kazu.myapplication.model.UpdatedItem;
 import com.example.kazu.myapplication.setting.Common;
 
 import java.io.IOException;
@@ -82,6 +83,10 @@ public class RestClient {
 
     public Call<CreatedItem> postItem(String body){
         return mApiService.apiPostItem(body);
+    }
+
+    public Call<UpdatedItem> putItem(int id, String body){
+        return mApiService.apiPutItem(id, body);
     }
 
 }
