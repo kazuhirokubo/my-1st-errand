@@ -61,7 +61,7 @@
     [x] パスワードは4文字以上8文字以下でないとエラーダイアログを出す
 24. [x] robolectricでロジックテストを実装してください
 25. [x] [spoon](http://square.github.io/spoon/)について調べて反映してください（UIテスト）
-22. [ ] marshmallowの権限について調べて、permissionDispacherを反映してください
+22. [ ] [marshmallowの権限](https://developer.android.com/training/permissions/index.html)について調べて、[permissionDispacherを反映してください](https://github.com/hotchemi/PermissionsDispatcher)
 22. [ ] Applicationクラスに関して調べて反映してください（リファクタリング時必須）
 
 23. [ ] Fragmentに関して調べて反映してください（リファクタリング時必須）
