@@ -9,6 +9,7 @@ import com.example.kazu.myapplication.model.Item;
 import com.example.kazu.myapplication.model.Judgement;
 import com.example.kazu.myapplication.model.UpdatedItem;
 import com.example.kazu.myapplication.test.Fixture;
+import com.example.kazu.myapplication.validation.Common;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -130,7 +131,7 @@ public class RestClientTest {
         final ApiService service = retrofit.create(ApiService.class);
 
         Judgement judge = service.apiDeleteItem(1).execute().body();
-        assertThat(judge.getResult()).isEqualTo(true);
+        assertThat(judge.getResult()).isTrue();
 
         System.out.println("TEST OK");
     }
@@ -148,6 +149,26 @@ public class RestClientTest {
         assertThat(item.getBody()).isEqualTo("put_item@gmail.com");
 
         System.out.println("TEST OK");
+    }
+
+
+    // ToDo: 別のクラスに持ってこーぜ
+    @Test(timeout = 500)
+    public void メールアドレス形式でないのでFalseが返る() throws Exception {
+        boolean isMailAddress = Common.isMailAddress("test");
+        assertThat(isMailAddress).isFalse();
+    }
+
+    @Test(timeout = 500)
+    public void パスワードの文字長が許容範囲外のためFalseが返る() throws Exception {
+        boolean isRequiredLength = Common.isRequiredLength("123");
+        assertThat(isRequiredLength).isFalse();
+    }
+
+    @Test(timeout = 500)
+    public void パスワードの文字長が許容範囲内のためTrueが返る() throws Exception {
+        boolean isRequiredLength = Common.isRequiredLength("12345");
+        assertThat(isRequiredLength).isTrue();
     }
 
     private Interceptor getStubClient(final String fixture) {

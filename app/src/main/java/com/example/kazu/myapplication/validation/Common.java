@@ -19,6 +19,7 @@ public class Common {
         if (!mailAddress.matches(mailFormat)) {
             return false;
         }
+
         return true;
     }
 
