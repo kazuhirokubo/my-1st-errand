@@ -3,5 +3,6 @@
     <string name="listview_title">タイトル</string>
     <string name="button_logout">ログアウト</string>
     <string name="button_add">追加</string>
-    <string name="button_Login">ログイン</string>
+    <string name="button_login">ログイン</string>
+    <string name="button_call">電話する</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.example.kazu.myapplication;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -23,11 +25,14 @@ import org.greenrobot.eventbus.EventBus;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
+@RuntimePermissions
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private static final EventBus BUS = new EventBus();
@@ -35,6 +40,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     @BindView(R.id.buttonLogin) Button buttonLogin;
     @BindView(R.id.textUserName) TextView textViewUserName;
     @BindView(R.id.textPasswd) TextView textViewPasswd;
+    @BindView(R.id.buttonCall) Button buttonCall;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
         Glide.with(this).load(R.raw.mario).into(target);
 
     }
-
 
     /**
      * ログインボタン押下時
@@ -129,4 +134,23 @@ public class MainActivity extends Activity implements View.OnClickListener {
         }
     }
 
+    /**
+     * 電話するボタン押下時
+     * @param view
+     */
+    @OnClick(R.id.buttonCall)
+    public void onCallClick(View view) {
+        MainActivityPermissionsDispatcher.makePhoneCallToSampleNumberWithCheck(MainActivity.this);
+    }
+
+    @NeedsPermission(Manifest.permission.CALL_PHONE)
+    public void makePhoneCallToSampleNumber() {
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:0120-093-877"));
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        MainActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
 }

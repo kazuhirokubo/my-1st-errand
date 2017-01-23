@@ -40,7 +40,13 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_Login"
+            android:text="@string/button_login"
             android:id="@+id/buttonLogin" />
+
+        <Button
+            android:text="@string/button_call"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/buttonCall" />
     </LinearLayout>
 </RelativeLayout>

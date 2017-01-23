@@ -3,5 +3,6 @@
     <string name="listview_title">Title</string>
     <string name="button_logout">Logout</string>
     <string name="button_add">Add</string>
-    <string name="button_Login">Login</string>
+    <string name="button_login">Login</string>
+    <string name="button_call">Call</string>
 </resources>
